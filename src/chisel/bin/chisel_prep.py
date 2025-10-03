@@ -365,12 +365,12 @@ def mkbarcodes(files, length, info):
     assert len(barcodes) == len(files), '{} != {}'.format(len(files), len(barcodes))
     getfile = (lambda f : f[0] if type(f) == tuple else f)
     reps = defaultdict(lambda : [])
-    map(lambda f : reps[info[getfile(f)]['cell']].append(f), sorted(files))
+    map(lambda f : reps[info[getfile(f)]['cell']].append(f), files)
     dup = [s for s in reps if len(reps[s]) != len(set(info[getfile(f)]['reps'] for f in reps[s]))]
     if len(dup) > 0:
         raise ValueError(error('Two or more of these files have the same cell name but also the same rep number:\n{}'.format('\n'.join([f for f in reps[dup[0]]]))))
     assign = dict(zip(files, barcodes))
-    return map(lambda f : assign[reps[info[getfile(f)]['cell']][0]], sorted(files))
+    return map(lambda f : assign[reps[info[getfile(f)]['cell']][0]], files)
     
     
 def align(files, names, barcodes, lanes, tmpdir, errdir, ref, bwa, samtools, J):
